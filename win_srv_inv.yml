@@ -1,4 +1,8 @@
-
 ---
-- name: Collect server inventory (AIX) and push to Elasticsearch
+- name: Test WinRM connectivity with Windows host
   hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Test ping using WinRM
+      win_ping:
