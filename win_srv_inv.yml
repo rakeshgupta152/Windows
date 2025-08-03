@@ -1,1 +1,4 @@
 
+---
+- name: Collect server inventory (AIX) and push to Elasticsearch
+  hosts: all
