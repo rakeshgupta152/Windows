@@ -1,8 +1,11 @@
 ---
-- name: Test WinRM connectivity with Windows host
+- name: Test WinRM connection with Windows host using real command
   hosts: all
   gather_facts: no
 
   tasks:
-    - name: Test ping using WinRM
-      win_ping:
+    - name: Run 'hostname' via WinRM
+      win_command: hostname
+
+    - name: Run 'Get-Date' via PowerShell
+      win_shell: Get-Date
