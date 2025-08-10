@@ -1,11 +1,12 @@
 ---
 - name: Test WinRM connection with Windows host using real command
-  hosts: all
+  hosts: win
   gather_facts: no
+  collections:
+    - ansible.windows
 
   tasks:
     - name: Run 'hostname' via WinRM
       win_command: hostname
-
     - name: Run 'Get-Date' via PowerShell
       win_shell: Get-Date
