@@ -1,12 +1,28 @@
 ---
-- name: Test WinRM connection with Windows host using real command
+- name: Validate NTLM to Windows host
   hosts: win
   gather_facts: no
-  collections:
-    - ansible.windows
 
   tasks:
+    - name: Assert we are using NTLM
+      ansible.builtin.assert:
+        that: ansible_winrm_transport | lower == 'ntlm'
+        fail_msg: "Not using NTLM (ansible_winrm_transport={{ ansible_winrm_transport }})"
+        success_msg: "NTLM transport confirmed."
+
+    - name: Basic ping
+      ansible.windows.win_ping:
+
     - name: Run 'hostname' via WinRM
-      win_command: hostname
-    - name: Run 'Get-Date' via PowerShell
-      win_shell: Get-Date
+      ansible.windows.win_command: hostname
+
+    - name: Show server date via PowerShell
+      ansible.windows.win_shell: Get-Date
+
+    - name: Read WinRM auth config (proof from the host)
+      ansible.windows.win_shell: "(Get-WSManInstance -ResourceURI winrm/config/service).Auth | ConvertTo-Json"
+      register: auth_cfg
+
+    - name: Print auth settings
+      ansible.builtin.debug:
+        var: auth_cfg.stdout
